@@ -3,12 +3,14 @@ package com.gmail.ansxodud238.schedule
 import android.text.LoginFilter
 import retrofit2.Call
 import com.gmail.ansxodud238.schedule.data.Subject
+import com.gmail.ansxodud238.schedule.data.User
 import retrofit2.http.*
 
 //유저 회원 가입
 data class UserResponse(var result : Int? = null)
 data class UserInfo(var username : String = "",var userpw : String = "")
 data class UserNameCheck(var username : String = "")
+data class UserLoginResult(var result: Int? = null, var user: User? = null)
 
 interface Service {
 
@@ -25,7 +27,7 @@ interface Service {
     fun userNameCheck(@Body userNameCheck: UserNameCheck) : Call<UserResponse>
 
     @POST("/api/user/login")
-    fun userLogin(@Body userInfo: UserInfo) : Call<UserResponse>
+    fun userLogin(@Body user: UserInfo) : Call<UserLoginResult>
 
 
 

@@ -60,9 +60,9 @@ class DatabaseHelper_User(context: Context) : SQLiteOpenHelper(context, DATABASE
         val db = this.writableDatabase // 데이터베이스 쓰기 시작
 
         val value = ContentValues() // 데이터에 저장할 값을 data클래스에서 받아오기
-        value.put(COLUMN_USER_ID,user.userId)
-        value.put(COLUMN_USER_NAME,user.userName)
-        value.put(COLUMN_USER_PASSWORD,user.userPw)
+        value.put(COLUMN_USER_ID,user.userid)
+        value.put(COLUMN_USER_NAME,user.username)
+        value.put(COLUMN_USER_PASSWORD,user.userpw)
 
         db.insert(TABLE_USER,null,value)//테이블에 값 추가
         db.close()//데이터베이스 종료
@@ -73,13 +73,13 @@ class DatabaseHelper_User(context: Context) : SQLiteOpenHelper(context, DATABASE
         val db = this.writableDatabase
 
         val values = ContentValues()
-        values.put(COLUMN_USER_ID, user.userId)
-        values.put(COLUMN_USER_NAME, user.userName)
-        values.put(COLUMN_USER_PASSWORD, user.userPw)
+        values.put(COLUMN_USER_ID, user.userid)
+        values.put(COLUMN_USER_NAME, user.username)
+        values.put(COLUMN_USER_PASSWORD, user.userpw)
 
         // updating row
         db.update(TABLE_USER, values, "$COLUMN_USER_NAME = ?",
-            arrayOf(user.userName.toString()))
+            arrayOf(user.username.toString()))
         db.close()
     }
 
@@ -88,7 +88,7 @@ class DatabaseHelper_User(context: Context) : SQLiteOpenHelper(context, DATABASE
         val db = this.writableDatabase
         // delete user record by id
         db.delete(TABLE_USER, "$COLUMN_USER_NAME = ?",
-            arrayOf(user.userName.toString()))
+            arrayOf(user.username.toString()))
         db.close()
 
 
