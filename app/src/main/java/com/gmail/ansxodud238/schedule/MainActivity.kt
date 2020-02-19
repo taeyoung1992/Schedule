@@ -81,7 +81,14 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+
+        text_signup.setOnClickListener {
+            val intent = Intent(this,SignUpActivity::class.java)
+            startActivity(intent)
+        }
     }
+
+
 
 
   }
