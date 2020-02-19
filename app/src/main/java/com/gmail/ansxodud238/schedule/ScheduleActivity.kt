@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import com.gmail.ansxodud238.schedule.data.Subject
 import okhttp3.OkHttpClient
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -14,6 +15,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 class ScheduleActivity : AppCompatActivity() {
+
+
+    private
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,19 +43,39 @@ class ScheduleActivity : AppCompatActivity() {
         val userid = intent.getStringExtra("userid").toInt()
 
 
-        service.userHasSchedule(userid).enqueue(object : Callback<ArrayList<Subject>>{
+        service.userHasSchedule(userid).enqueue(object : Callback<ArrayList<Subject>> {
             override fun onFailure(call: Call<ArrayList<Subject>>, t: Throwable) {
-                Log.d("response","fail")
+                Log.d("response", "fail")
             }
 
-            override fun onResponse(call: Call<ArrayList<Subject>>, response: Response<ArrayList<Subject>>) {
-                Log.d("response",response.body().toString())
+            override fun onResponse(
+                call: Call<ArrayList<Subject>>,
+                response: Response<ArrayList<Subject>>
+            ) {
+                Log.d("response", response.body().toString())
 
             }
         })
 
 
+    }
 
+    fun subjectDataJsonParse(subjectData: String) {
+        val jObject = JSONObject(subjectData)
+        val jArray = jObject.getJSONArray("")
 
+        for (i in 0 until jArray.length()) {
+            var obj = jArray.getJSONObject(i)
+            val subject = Subject()
+            subject.subjectid = obj.getInt("subjectId")
+            subject.subjectname = obj.getString("subjectName")
+            subject.starttime = obj.getInt("startTime")
+            subject.endtime = obj.getInt("endTime")
+            subject.wday = obj.getInt("wDay")
+
+            if (databasehelper_Subject.checkSubjectId(subject.subjectid!!))
+                databasehelper_Subject.addSubject(subject)
+
+        }
     }
 }
