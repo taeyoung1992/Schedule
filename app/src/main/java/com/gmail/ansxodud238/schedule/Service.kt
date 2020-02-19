@@ -23,11 +23,19 @@ interface Service {
     @POST("/api/user")
     fun addUser(@Body userInfo: UserInfo) : Call<UserResponse>
 
+    //유저아이디 중복검사
     @POST("/api/user/check")
     fun userNameCheck(@Body userNameCheck: UserNameCheck) : Call<UserResponse>
 
+    //유저 로그인
     @POST("/api/user/login")
     fun userLogin(@Body user: UserInfo) : Call<UserLoginResult>
+
+    @GET("/api/schedule/{userid}")
+    fun userHasSchedule(@Path("userid")userid : Int) : Call<ArrayList<Subject>>
+
+
+
 
 
 

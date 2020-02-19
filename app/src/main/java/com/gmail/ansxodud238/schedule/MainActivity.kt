@@ -65,11 +65,11 @@ class MainActivity : AppCompatActivity() {
                     call: Call<UserLoginResult>,
                     response: Response<UserLoginResult>
                 ) {
-                    Log.d("response",response.body().toString())
                     val idCheck = response.body()?.result
                     if(idCheck == 1){
                         Toast.makeText(this@MainActivity,"로그인 성공!",Toast.LENGTH_SHORT).show()
                         val intent = Intent(this@MainActivity,ScheduleActivity::class.java)
+                        intent.putExtra("userid",response.body()?.user?.userid.toString())
                         startActivity(intent)
                     }else{
                         Toast.makeText(this@MainActivity,"로그인 실패!\n로그인 정보를 다시 확인해 주세요.",Toast.LENGTH_SHORT).show()
