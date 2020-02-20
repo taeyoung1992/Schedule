@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
                         intent.putExtra("userid",response.body()?.user?.userid.toString())
                         startActivity(intent)
                     }else{
-                        Toast.makeText(this@MainActivity,"로그인 실패!\n로그인 정보를 다시 확인해 주세요.",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@MainActivity,"로그인 실패!\n로그인 정보를 다시 확인해 주세요.${idCheck}",Toast.LENGTH_SHORT).show()
                     }
                 }
             })

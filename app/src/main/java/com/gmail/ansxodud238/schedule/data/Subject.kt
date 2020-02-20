@@ -5,4 +5,9 @@ data class Subject(var subjectid : Int? = null,
                    var starttime : Int? = null,
                    var endtime : Int? = null,
                    var wday : Int? = null,
-                   var color : String ="")
+                   var color : String =""){
+    override fun toString(): String {
+        val result = "과목명:${subjectname}/시간:${starttime}~${endtime}"
+        return result
+    }
+}
