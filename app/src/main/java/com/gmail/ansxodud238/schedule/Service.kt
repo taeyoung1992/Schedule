@@ -5,12 +5,15 @@ import retrofit2.Call
 import com.gmail.ansxodud238.schedule.data.Subject
 import com.gmail.ansxodud238.schedule.data.User
 import retrofit2.http.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 //유저 회원 가입
 data class UserResponse(var result : Int? = null)
 data class UserInfo(var username : String = "",var userpw : String = "")
 data class UserNameCheck(var username : String = "")
 data class UserLoginResult(var result: Int? = null, var user: User? = null)
+data class UserDataSend(var subjectid : Int? = null, var userid: Int? = null)
 
 interface Service {
 
@@ -33,6 +36,9 @@ interface Service {
 
     @GET("/api/schedule/{userid}")
     fun userHasSchedule(@Path("userid")userid : Int) : Call<ArrayList<Subject>>
+
+    @GET("/api/schedule")
+    fun userData(@Body userDataSend: ArrayList<UserDataSend>) : Call<UserResponse>
 
 
 
