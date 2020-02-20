@@ -1,6 +1,7 @@
 package com.gmail.ansxodud238.schedule
 
 import android.content.DialogInterface
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -36,8 +37,8 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
     private var selectListWed: ArrayList<Subject>? = null
     private var selectListThu: ArrayList<Subject>? = null
     private var selectListFri: ArrayList<Subject>? = null
-    private var sendList : ArrayList<Subject>? = null
-    private var sendListPorm : ArrayList<UserDataSend>? = null
+    private var sendList: ArrayList<Subject>? = null
+    private var sendListPorm: ArrayList<UserDataSend>? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,56 +98,65 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
 
         btn_save.setOnClickListener {
             sendList = ArrayList()
-            if(selectListMon!!.size>0)
-            for(i in 0 .. selectListMon!!.size.minus(1)){
-                sendList!!.add(selectListMon!![i])
-            }
-            if(selectListTue!!.size>0)
-            for(i in 0 .. selectListTue!!.size.minus(1)){
-                sendList!!.add(selectListTue!![i])
-            }
-            if(selectListWed!!.size>0)
-            for(i in 0 .. selectListWed!!.size.minus(1)){
-                sendList!!.add(selectListWed!![i])
-            }
-            if(selectListThu!!.size>0)
-            for(i in 0 .. selectListThu!!.size.minus(1)){
-                sendList!!.add(selectListThu!![i])
-            }
-            if(selectListFri!!.size>0)
-            for(i in 0 .. selectListFri!!.size.minus(1)){
-                sendList!!.add(selectListFri!![i])
-            }
+            if (selectListMon!!.size > 0)
+                for (i in 0..selectListMon!!.size.minus(1)) {
+                    sendList!!.add(selectListMon!![i])
+                }
+            if (selectListTue!!.size > 0)
+                for (i in 0..selectListTue!!.size.minus(1)) {
+                    sendList!!.add(selectListTue!![i])
+                }
+            if (selectListWed!!.size > 0)
+                for (i in 0..selectListWed!!.size.minus(1)) {
+                    sendList!!.add(selectListWed!![i])
+                }
+            if (selectListThu!!.size > 0)
+                for (i in 0..selectListThu!!.size.minus(1)) {
+                    sendList!!.add(selectListThu!![i])
+                }
+            if (selectListFri!!.size > 0)
+                for (i in 0..selectListFri!!.size.minus(1)) {
+                    sendList!!.add(selectListFri!![i])
+                }
 
             sendListPorm = ArrayList()
 
 
-            for(i in 0 .. sendList!!.size.minus(1)) {
+            for (i in 0..sendList!!.size.minus(1)) {
                 var userData = UserDataSend()
                 userData.subjectid = sendList!![i].subjectid
                 userData.userid = userid
                 sendListPorm!!.add(userData)
             }
-                service.userData(sendListPorm!!).enqueue(object : Callback<UserResponse>{
-                    override fun onFailure(call: Call<UserResponse>, t: Throwable) {
-                        Toast.makeText(this@ScheduleActivity, "서버와 접속할 수 없어서 데이터를 저장하지 못하였습니다.", Toast.LENGTH_SHORT).show()
+            service.userData(sendListPorm!!).enqueue(object : Callback<UserResponse> {
+                override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+                    Toast.makeText(
+                        this@ScheduleActivity,
+                        "서버와 접속할 수 없어서 데이터를 저장하지 못하였습니다.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                override fun onResponse(
+                    call: Call<UserResponse>,
+                    response: Response<UserResponse>
+                ) {
+                    var resultCheck = response.body()!!.result
+                    if (resultCheck == 1) {
+                        Toast.makeText(this@ScheduleActivity, "데이터 저장 성공!", Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
+                        Toast.makeText(
+                            this@ScheduleActivity,
+                            "데이터를 저장하는데 실패했습니다.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
-
-                    override fun onResponse(
-                        call: Call<UserResponse>,
-                        response: Response<UserResponse>
-                    ) {
-                        var resultCheck = response.body()!!.result
-                        if(resultCheck == 1){
-                            Toast.makeText(this@ScheduleActivity, "데이터 저장 성공!", Toast.LENGTH_SHORT).show()
-                        }else{
-                            Toast.makeText(this@ScheduleActivity, "데이터를 저장하는데 실패했습니다.", Toast.LENGTH_SHORT).show()
-                        }
-                    }
+                }
 
 
-                })
-            }
+            })
+        }
 
 
 
@@ -160,7 +170,11 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
             //서버에서 내가 저장한 데이터 가녀오기
             service.userHasSchedule(userid).enqueue(object : Callback<ArrayList<Subject>> {
                 override fun onFailure(call: Call<ArrayList<Subject>>, t: Throwable) {
-                    Toast.makeText(this@ScheduleActivity, "저장한 과목을 불러오는데에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@ScheduleActivity,
+                        "저장한 과목을 불러오는데에 실패했습니다.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
 
                 override fun onResponse(
@@ -171,7 +185,6 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
 
                 }
             })
-
 
 
         }
@@ -247,7 +260,6 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
                                     ).show()
                                     selectListMon!!.removeAt(index)
                                     selectListMon!!.add(dialogList[which])
-                                    Log.d("list", "처음")
                                 } else if (newDataEndTime!! >= oldDataStartTime!! && newDataEndTime!! <= oldDataEndTime!!) {
                                     Toast.makeText(
                                         this@ScheduleActivity,
@@ -256,11 +268,9 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
                                     ).show()
                                     selectListMon!!.removeAt(index)
                                     selectListMon!!.add(dialogList[which])
-                                    Log.d("list", "중간")
 
                                 } else {
                                     selectListMon!!.add(dialogList[which])
-                                    Log.d("list", "나중")
 
                                 }
                             }
@@ -278,6 +288,7 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
                         for (delIndex in 0..scheduleList.size.minus(1)) {
                             var text = findViewById<TextView>(scheduleList[delIndex])
                             text.text = ""
+                            text.setBackgroundColor(Color.parseColor("#00ff0000"))
                         }
                         //각각의 view에 데이터 저장
                         for (i in 0..selectListMon!!.size.minus(1)) {
@@ -288,7 +299,7 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
                                 var textViewId = scheduleList.get(index)
                                 var text = findViewById<TextView>(textViewId)
                                 text.text = selectListMon!!.get(i).subjectname
-
+                                text.setBackgroundColor(Color.parseColor(selectListMon!!.get(i).color.toString()))
                             }
                         }
                     }
@@ -327,7 +338,6 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
                                     ).show()
                                     selectListTue!!.removeAt(index)
                                     selectListTue!!.add(dialogList[which])
-                                    Log.d("list", "처음")
                                 } else if (newDataEndTime!! >= oldDataStartTime!! && newDataEndTime!! <= oldDataEndTime!!) {
                                     Toast.makeText(
                                         this@ScheduleActivity,
@@ -336,11 +346,9 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
                                     ).show()
                                     selectListTue!!.removeAt(index)
                                     selectListTue!!.add(dialogList[which])
-                                    Log.d("list", "중간")
 
                                 } else {
                                     selectListTue!!.add(dialogList[which])
-                                    Log.d("list", "나중")
 
                                 }
                             }
@@ -359,6 +367,8 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
                         for (delIndex in 0..scheduleList.size - 1) {
                             var text = findViewById<TextView>(scheduleList[delIndex])
                             text.text = ""
+                            text.setBackgroundColor(Color.parseColor("#00ff0000"))
+
                         }
                         //각각의 view에 데이터 저장
                         for (i in 0..selectListTue!!.size - 1) {
@@ -369,7 +379,7 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
                                 var textViewId = scheduleList.get(index)
                                 var text = findViewById<TextView>(textViewId)
                                 text.text = selectListTue!!.get(i).subjectname
-
+                                text.setBackgroundColor(Color.parseColor(selectListTue!!.get(i).color.toString()))
                             }
                         }
                     }
@@ -409,7 +419,6 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
                                     ).show()
                                     selectListWed!!.removeAt(index)
                                     selectListWed!!.add(dialogList[which])
-                                    Log.d("list", "처음")
                                 } else if (newDataEndTime!! >= oldDataStartTime!! && newDataEndTime!! <= oldDataEndTime!!) {
                                     Toast.makeText(
                                         this@ScheduleActivity,
@@ -418,11 +427,9 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
                                     ).show()
                                     selectListWed!!.removeAt(index)
                                     selectListWed!!.add(dialogList[which])
-                                    Log.d("list", "중간")
 
                                 } else {
                                     selectListWed!!.add(dialogList[which])
-                                    Log.d("list", "나중")
 
                                 }
                             }
@@ -441,6 +448,7 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
                         for (delIndex in 0..scheduleList.size - 1) {
                             var text = findViewById<TextView>(scheduleList[delIndex])
                             text.text = ""
+                            text.setBackgroundColor(Color.parseColor("#00ff0000"))
                         }
                         //각각의 view에 데이터 저장
                         for (i in 0..selectListWed!!.size - 1) {
@@ -451,7 +459,7 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
                                 var textViewId = scheduleList.get(index)
                                 var text = findViewById<TextView>(textViewId)
                                 text.text = selectListWed!!.get(i).subjectname
-
+                                text.setBackgroundColor(Color.parseColor(selectListWed!!.get(i).color.toString()))
                             }
                         }
                     }
@@ -489,7 +497,6 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
                                     ).show()
                                     selectListThu!!.removeAt(index)
                                     selectListThu!!.add(dialogList[which])
-                                    Log.d("list", "처음")
                                 } else if (newDataEndTime!! >= oldDataStartTime!! && newDataEndTime!! <= oldDataEndTime!!) {
                                     Toast.makeText(
                                         this@ScheduleActivity,
@@ -498,11 +505,9 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
                                     ).show()
                                     selectListThu!!.removeAt(index)
                                     selectListThu!!.add(dialogList[which])
-                                    Log.d("list", "중간")
 
                                 } else {
                                     selectListThu!!.add(dialogList[which])
-                                    Log.d("list", "나중")
 
                                 }
                             }
@@ -521,6 +526,8 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
                         for (delIndex in 0..scheduleList.size - 1) {
                             var text = findViewById<TextView>(scheduleList[delIndex])
                             text.text = ""
+                            text.setBackgroundColor(Color.parseColor("#00ff0000"))
+
                         }
                         //각각의 view에 데이터 저장
                         for (i in 0..selectListThu!!.size - 1) {
@@ -531,6 +538,7 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
                                 var textViewId = scheduleList.get(index)
                                 var text = findViewById<TextView>(textViewId)
                                 text.text = selectListThu!!.get(i).subjectname
+                                text.setBackgroundColor(Color.parseColor(selectListThu!!.get(i).color.toString()))
 
                             }
                         }
@@ -570,7 +578,6 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
                                     ).show()
                                     selectListFri!!.removeAt(index)
                                     selectListFri!!.add(dialogList[which])
-                                    Log.d("list", "처음")
                                 } else if (newDataEndTime!! >= oldDataStartTime!! && newDataEndTime!! <= oldDataEndTime!!) {
                                     Toast.makeText(
                                         this@ScheduleActivity,
@@ -579,11 +586,9 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
                                     ).show()
                                     selectListFri!!.removeAt(index)
                                     selectListFri!!.add(dialogList[which])
-                                    Log.d("list", "중간")
 
                                 } else {
                                     selectListFri!!.add(dialogList[which])
-                                    Log.d("list", "나중")
 
                                 }
                             }
@@ -602,6 +607,8 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
                         for (delIndex in 0..scheduleList.size - 1) {
                             var text = findViewById<TextView>(scheduleList[delIndex])
                             text.text = ""
+                            text.setBackgroundColor(Color.parseColor("#00ff0000"))
+
                         }
                         //각각의 view에 데이터 저장
                         for (i in 0..selectListFri!!.size - 1) {
@@ -612,7 +619,7 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
                                 var textViewId = scheduleList.get(index)
                                 var text = findViewById<TextView>(textViewId)
                                 text.text = selectListFri!!.get(i).subjectname
-
+                                text.setBackgroundColor(Color.parseColor(selectListFri!!.get(i).color.toString()))
                             }
                         }
                     }
