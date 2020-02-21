@@ -88,6 +88,8 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
         //다이얼로그에 연결할 어댑터 생성
         arrayAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, dialogList)
 
+
+        mySubjectList = ArrayList()
         selectListMon = ArrayList()
         selectListTue = ArrayList()
         selectListWed = ArrayList()
@@ -127,7 +129,6 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
                 userData.subjectid = sendList!![i].subjectid
                 userData.userid = userid
                 sendListPorm!!.add(userData)
-                Log.d("send",sendListPorm!!.joinToString())
             }
             service.userData(sendListPorm!!).enqueue(object : Callback<UserResponse> {
                 override fun onFailure(call: Call<UserResponse>, t: Throwable) {
@@ -182,7 +183,197 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
                     call: Call<ArrayList<Subject>>,
                     response: Response<ArrayList<Subject>>
                 ) {
+                    Toast.makeText(
+                        this@ScheduleActivity,
+                        "저장한 과목 불러오기 성공!.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     mySubjectList = response.body()
+
+                    mondaySubjectList = ArrayList()
+                    tuesdaySubjectList = ArrayList()
+                    wednesdaySubjectList = ArrayList()
+                    thursdaySubjectList = ArrayList()
+                    fridaySubjectList = ArrayList()
+
+                    for (i in 0..mySubjectList!!.size - 1) {
+                        if (mySubjectList?.get(i)?.wday == 101) {
+
+                            mondaySubjectList?.add(mySubjectList!!.get(i))
+                            //각각 view를 가져와서 데이터를 저장할 준비
+                            val scheduleList = intArrayOf(
+                                R.id.text1019, R.id.text10110, R.id.text10111,
+                                R.id.text10112, R.id.text10113, R.id.text10114,
+                                R.id.text10115, R.id.text10116, R.id.text10117, R.id.text10118
+                            )
+                            //데이터 초기화
+                            for (delIndex in 0..scheduleList.size.minus(1)) {
+                                var text = findViewById<TextView>(scheduleList[delIndex])
+                                text.text = ""
+                                text.setBackgroundColor(Color.parseColor("#00ff0000"))
+                            }
+                            //각각의 view에 데이터 저장
+                            for (i in 0..mondaySubjectList!!.size.minus(1)) {
+                                var start = mondaySubjectList!!.get(i).starttime!!
+                                var end = mondaySubjectList!!.get(i).endtime!!
+                                for (j in start!!..end!!) {
+                                    val index = j - 9
+                                    var textViewId = scheduleList.get(index)
+                                    var text = findViewById<TextView>(textViewId)
+                                    text.text = mondaySubjectList!!.get(i).subjectname
+                                    text.setBackgroundColor(
+                                        Color.parseColor(
+                                            mondaySubjectList!!.get(
+                                                i
+                                            ).color.toString()
+                                        )
+                                    )
+                                }
+                            }
+
+                        }
+                        if (mySubjectList?.get(i)?.wday == 102) {
+
+                            tuesdaySubjectList?.add(mySubjectList!!.get(i))
+                            //각각 view를 가져와서 데이터를 저장할 준비
+                            val scheduleList = intArrayOf(
+                                R.id.text1029, R.id.text10210, R.id.text10211,
+                                R.id.text10212, R.id.text10213, R.id.text10214,
+                                R.id.text10215, R.id.text10216, R.id.text10217, R.id.text10218
+                            )
+                            //데이터 초기화
+                            for (delIndex in 0..scheduleList.size.minus(1)) {
+                                var text = findViewById<TextView>(scheduleList[delIndex])
+                                text.text = ""
+                                text.setBackgroundColor(Color.parseColor("#00ff0000"))
+                            }
+                            //각각의 view에 데이터 저장
+                            for (i in 0..tuesdaySubjectList!!.size.minus(1)) {
+                                var start = tuesdaySubjectList!!.get(i).starttime!!
+                                var end = tuesdaySubjectList!!.get(i).endtime!!
+                                for (j in start!!..end!!) {
+                                    val index = j - 9
+                                    var textViewId = scheduleList.get(index)
+                                    var text = findViewById<TextView>(textViewId)
+                                    text.text = tuesdaySubjectList!!.get(i).subjectname
+                                    text.setBackgroundColor(
+                                        Color.parseColor(
+                                            tuesdaySubjectList!!.get(
+                                                i
+                                            ).color.toString()
+                                        )
+                                    )
+                                }
+                            }
+
+                        }
+                        if (mySubjectList?.get(i)?.wday == 103) {
+
+                            wednesdaySubjectList?.add(mySubjectList!!.get(i))
+                            //각각 view를 가져와서 데이터를 저장할 준비
+                            val scheduleList = intArrayOf(
+                                R.id.text1039, R.id.text10310, R.id.text10311,
+                                R.id.text10312, R.id.text10313, R.id.text10314,
+                                R.id.text10315, R.id.text10316, R.id.text10317, R.id.text10318
+                            )
+                            //데이터 초기화
+                            for (delIndex in 0..scheduleList.size.minus(1)) {
+                                var text = findViewById<TextView>(scheduleList[delIndex])
+                                text.text = ""
+                                text.setBackgroundColor(Color.parseColor("#00ff0000"))
+                            }
+                            //각각의 view에 데이터 저장
+                            for (i in 0..wednesdaySubjectList!!.size.minus(1)) {
+                                var start = wednesdaySubjectList!!.get(i).starttime!!
+                                var end = wednesdaySubjectList!!.get(i).endtime!!
+                                for (j in start!!..end!!) {
+                                    val index = j - 9
+                                    var textViewId = scheduleList.get(index)
+                                    var text = findViewById<TextView>(textViewId)
+                                    text.text = wednesdaySubjectList!!.get(i).subjectname
+                                    text.setBackgroundColor(
+                                        Color.parseColor(
+                                            wednesdaySubjectList!!.get(
+                                                i
+                                            ).color.toString()
+                                        )
+                                    )
+                                }
+                            }
+
+                        }
+                        if (mySubjectList?.get(i)?.wday == 104) {
+
+                            thursdaySubjectList?.add(mySubjectList!!.get(i))
+                            //각각 view를 가져와서 데이터를 저장할 준비
+                            val scheduleList = intArrayOf(
+                                R.id.text1049, R.id.text10410, R.id.text10411,
+                                R.id.text10412, R.id.text10413, R.id.text10414,
+                                R.id.text10415, R.id.text10416, R.id.text10417, R.id.text10418
+                            )
+                            //데이터 초기화
+                            for (delIndex in 0..scheduleList.size.minus(1)) {
+                                var text = findViewById<TextView>(scheduleList[delIndex])
+                                text.text = ""
+                                text.setBackgroundColor(Color.parseColor("#00ff0000"))
+                            }
+                            //각각의 view에 데이터 저장
+                            for (i in 0..thursdaySubjectList!!.size.minus(1)) {
+                                var start = thursdaySubjectList!!.get(i).starttime!!
+                                var end = thursdaySubjectList!!.get(i).endtime!!
+                                for (j in start!!..end!!) {
+                                    val index = j - 9
+                                    var textViewId = scheduleList.get(index)
+                                    var text = findViewById<TextView>(textViewId)
+                                    text.text = thursdaySubjectList!!.get(i).subjectname
+                                    text.setBackgroundColor(
+                                        Color.parseColor(
+                                            thursdaySubjectList!!.get(
+                                                i
+                                            ).color.toString()
+                                        )
+                                    )
+                                }
+                            }
+
+                        }
+                        if (mySubjectList?.get(i)?.wday == 105) {
+
+                            fridaySubjectList?.add(mySubjectList!!.get(i))
+                            //각각 view를 가져와서 데이터를 저장할 준비
+                            val scheduleList = intArrayOf(
+                                R.id.text1059, R.id.text10510, R.id.text10511,
+                                R.id.text10512, R.id.text10513, R.id.text10514,
+                                R.id.text10515, R.id.text10516, R.id.text10517, R.id.text10518
+                            )
+                            //데이터 초기화
+                            for (delIndex in 0..scheduleList.size.minus(1)) {
+                                var text = findViewById<TextView>(scheduleList[delIndex])
+                                text.text = ""
+                                text.setBackgroundColor(Color.parseColor("#00ff0000"))
+                            }
+                            //각각의 view에 데이터 저장
+                            for (i in 0..fridaySubjectList!!.size.minus(1)) {
+                                var start = fridaySubjectList!!.get(i).starttime!!
+                                var end = fridaySubjectList!!.get(i).endtime!!
+                                for (j in start!!..end!!) {
+                                    val index = j - 9
+                                    var textViewId = scheduleList.get(index)
+                                    var text = findViewById<TextView>(textViewId)
+                                    text.text = fridaySubjectList!!.get(i).subjectname
+                                    text.setBackgroundColor(
+                                        Color.parseColor(
+                                            fridaySubjectList!!.get(
+                                                i
+                                            ).color.toString()
+                                        )
+                                    )
+                                }
+                            }
+
+                        }
+
+                    }
 
                 }
             })
@@ -206,6 +397,7 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         //각각 요일별로 과목을 저장할 리스트 생성
         var getButtonid = v?.id
+
         mondaySubjectList = ArrayList()
         tuesdaySubjectList = ArrayList()
         wednesdaySubjectList = ArrayList()
@@ -230,415 +422,418 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
         }
 
         when (getButtonid) {
-            R.id.btn_mon -> {
-
-                //다이얼로그 생성 전에 이미 저장되어 있는 데이터 삭제
-                dialogList.removeAll(dialogList)
-                //다이얼로그에 저장할 데이터 저장
-                for (i in 0..mondaySubjectList.size - 1) {
-                    dialogList.add(mondaySubjectList.get(i))
-                }
-                //어댑터 리스트 갱신
-                arrayAdapter.notifyDataSetChanged()
-                //다이얼로그 생성
-                val builder = AlertDialog.Builder(this)
-                builder.setTitle("입력할 과목을 선택해 주세요.")
-                //다이얼로그와 어댑터를 연결하고 과목 선택시 이벤트 발생
-                builder.setAdapter(arrayAdapter, object : DialogInterface.OnClickListener {
-                    override fun onClick(dialog: DialogInterface?, which: Int) {
-                        if (selectListMon!!.size > 0) {
-                            for (index in 0..selectListMon!!.size - 1) {
-                                var oldDataStartTime = selectListMon!!.get(index).starttime
-                                var oldDataEndTime = selectListMon!!.get(index).endtime
-                                var newDataStartTime = dialogList[which].starttime
-                                var newDataEndTime = dialogList[which].endtime
-
-                                if (newDataStartTime!! >= oldDataStartTime!! && newDataStartTime!! <= oldDataEndTime!!) {
-                                    Toast.makeText(
-                                        this@ScheduleActivity,
-                                        "중복된 시간을 선택하셨습니다.\n선택한 과목으로 변경합니다.",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    selectListMon!!.removeAt(index)
-                                    selectListMon!!.add(dialogList[which])
-                                } else if (newDataEndTime!! >= oldDataStartTime!! && newDataEndTime!! <= oldDataEndTime!!) {
-                                    Toast.makeText(
-                                        this@ScheduleActivity,
-                                        "중복된 시간을 선택하셨습니다.\n선택한 과목으로 변경합니다.",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    selectListMon!!.removeAt(index)
-                                    selectListMon!!.add(dialogList[which])
-
-                                } else {
-                                    selectListMon!!.add(dialogList[which])
-
-                                }
-                            }
-                        } else {
-                            selectListMon!!.add(dialogList[which])
-                        }
-
-                        //각각 view를 가져와서 데이터를 저장할 준비
-                        val scheduleList = intArrayOf(
-                            R.id.text1019, R.id.text10110, R.id.text10111,
-                            R.id.text10112, R.id.text10113, R.id.text10114,
-                            R.id.text10115, R.id.text10116, R.id.text10117, R.id.text10118
-                        )
-                        //데이터 초기화
-                        for (delIndex in 0..scheduleList.size.minus(1)) {
-                            var text = findViewById<TextView>(scheduleList[delIndex])
-                            text.text = ""
-                            text.setBackgroundColor(Color.parseColor("#00ff0000"))
-                        }
-                        //각각의 view에 데이터 저장
-                        for (i in 0..selectListMon!!.size.minus(1)) {
-                            var start = selectListMon!!.get(i).starttime!!
-                            var end = selectListMon!!.get(i).endtime!!
-                            for (j in start!!..end!!) {
-                                val index = j - 9
-                                var textViewId = scheduleList.get(index)
-                                var text = findViewById<TextView>(textViewId)
-                                text.text = selectListMon!!.get(i).subjectname
-                                text.setBackgroundColor(Color.parseColor(selectListMon!!.get(i).color.toString()))
-                            }
-                        }
-                    }
-
-                })
-                var dialog = builder.create()
-                dialog.show()
-            }
-            R.id.btn_tue -> {
-                //다이얼로그 생성 전에 이미 저장되어 있는 데이터 삭제
-                dialogList.removeAll(dialogList)
-                //다이얼로그에 저장할 데이터 저장
-                for (i in 0..tuesdaySubjectList.size - 1) {
-                    dialogList.add(tuesdaySubjectList.get(i))
-                }
-                //어댑터 리스트 갱신
-                arrayAdapter.notifyDataSetChanged()
-                //다이얼로그 생성
-                val builder = AlertDialog.Builder(this)
-                builder.setTitle("입력할 과목을 선택해 주세요.")
-                //다이얼로그와 어댑터를 연결하고 과목 선택시 이벤트 발생
-                builder.setAdapter(arrayAdapter, object : DialogInterface.OnClickListener {
-                    override fun onClick(dialog: DialogInterface?, which: Int) {
-                        if (selectListTue!!.size > 0) {
-                            for (index in 0..selectListTue!!.size - 1) {
-                                var oldDataStartTime = selectListTue!!.get(index).starttime
-                                var oldDataEndTime = selectListTue!!.get(index).endtime
-                                var newDataStartTime = dialogList[which].starttime
-                                var newDataEndTime = dialogList[which].endtime
-
-                                if (newDataStartTime!! >= oldDataStartTime!! && newDataStartTime!! <= oldDataEndTime!!) {
-                                    Toast.makeText(
-                                        this@ScheduleActivity,
-                                        "중복된 시간을 선택하셨습니다.\n선택한 과목으로 변경합니다.",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    selectListTue!!.removeAt(index)
-                                    selectListTue!!.add(dialogList[which])
-                                } else if (newDataEndTime!! >= oldDataStartTime!! && newDataEndTime!! <= oldDataEndTime!!) {
-                                    Toast.makeText(
-                                        this@ScheduleActivity,
-                                        "중복된 시간을 선택하셨습니다.\n선택한 과목으로 변경합니다.",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    selectListTue!!.removeAt(index)
-                                    selectListTue!!.add(dialogList[which])
-
-                                } else {
-                                    selectListTue!!.add(dialogList[which])
-
-                                }
-                            }
-                        } else {
-                            selectListTue!!.add(dialogList[which])
-                        }
-
-                        Log.d("list", selectListTue!!.size.toString())
-                        //각각 view를 가져와서 데이터를 저장할 준비
-                        val scheduleList = intArrayOf(
-                            R.id.text1029, R.id.text10210, R.id.text10211,
-                            R.id.text10212, R.id.text10213, R.id.text10214,
-                            R.id.text10215, R.id.text10216, R.id.text10217, R.id.text10218
-                        )
-                        //데이터 초기화
-                        for (delIndex in 0..scheduleList.size - 1) {
-                            var text = findViewById<TextView>(scheduleList[delIndex])
-                            text.text = ""
-                            text.setBackgroundColor(Color.parseColor("#00ff0000"))
-
-                        }
-                        //각각의 view에 데이터 저장
-                        for (i in 0..selectListTue!!.size - 1) {
-                            var start = selectListTue!!.get(i).starttime!!
-                            var end = selectListTue!!.get(i).endtime!!
-                            for (j in start!!..end!!) {
-                                val index = j - 9
-                                var textViewId = scheduleList.get(index)
-                                var text = findViewById<TextView>(textViewId)
-                                text.text = selectListTue!!.get(i).subjectname
-                                text.setBackgroundColor(Color.parseColor(selectListTue!!.get(i).color.toString()))
-                            }
-                        }
-                    }
-
-                })
-                var dialog = builder.create()
-                dialog.show()
-
-            }
-            R.id.btn_wed -> {
-                //다이얼로그 생성 전에 이미 저장되어 있는 데이터 삭제
-                dialogList.removeAll(dialogList)
-                //다이얼로그에 저장할 데이터 저장
-                for (i in 0..wednesdaySubjectList.size - 1) {
-                    dialogList.add(wednesdaySubjectList.get(i))
-                }
-                //어댑터 리스트 갱신
-                arrayAdapter.notifyDataSetChanged()
-                //다이얼로그 생성
-                val builder = AlertDialog.Builder(this)
-                builder.setTitle("입력할 과목을 선택해 주세요.")
-                //다이얼로그와 어댑터를 연결하고 과목 선택시 이벤트 발생
-                builder.setAdapter(arrayAdapter, object : DialogInterface.OnClickListener {
-                    override fun onClick(dialog: DialogInterface?, which: Int) {
-                        if (selectListWed!!.size > 0) {
-                            for (index in 0..selectListWed!!.size - 1) {
-                                var oldDataStartTime = selectListWed!!.get(index).starttime
-                                var oldDataEndTime = selectListWed!!.get(index).endtime
-                                var newDataStartTime = dialogList[which].starttime
-                                var newDataEndTime = dialogList[which].endtime
-
-                                if (newDataStartTime!! >= oldDataStartTime!! && newDataStartTime!! <= oldDataEndTime!!) {
-                                    Toast.makeText(
-                                        this@ScheduleActivity,
-                                        "중복된 시간을 선택하셨습니다.\n선택한 과목으로 변경합니다.",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    selectListWed!!.removeAt(index)
-                                    selectListWed!!.add(dialogList[which])
-                                } else if (newDataEndTime!! >= oldDataStartTime!! && newDataEndTime!! <= oldDataEndTime!!) {
-                                    Toast.makeText(
-                                        this@ScheduleActivity,
-                                        "중복된 시간을 선택하셨습니다.\n선택한 과목으로 변경합니다.",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    selectListWed!!.removeAt(index)
-                                    selectListWed!!.add(dialogList[which])
-
-                                } else {
-                                    selectListWed!!.add(dialogList[which])
-
-                                }
-                            }
-                        } else {
-                            selectListWed!!.add(dialogList[which])
-                        }
-
-                        Log.d("list", selectListWed!!.size.toString())
-                        //각각 view를 가져와서 데이터를 저장할 준비
-                        val scheduleList = intArrayOf(
-                            R.id.text1039, R.id.text10310, R.id.text10311,
-                            R.id.text10312, R.id.text10313, R.id.text10314,
-                            R.id.text10315, R.id.text10316, R.id.text10317, R.id.text10318
-                        )
-                        //데이터 초기화
-                        for (delIndex in 0..scheduleList.size - 1) {
-                            var text = findViewById<TextView>(scheduleList[delIndex])
-                            text.text = ""
-                            text.setBackgroundColor(Color.parseColor("#00ff0000"))
-                        }
-                        //각각의 view에 데이터 저장
-                        for (i in 0..selectListWed!!.size - 1) {
-                            var start = selectListWed!!.get(i).starttime!!
-                            var end = selectListWed!!.get(i).endtime!!
-                            for (j in start!!..end!!) {
-                                val index = j - 9
-                                var textViewId = scheduleList.get(index)
-                                var text = findViewById<TextView>(textViewId)
-                                text.text = selectListWed!!.get(i).subjectname
-                                text.setBackgroundColor(Color.parseColor(selectListWed!!.get(i).color.toString()))
-                            }
-                        }
-                    }
-
-                })
-                var dialog = builder.create()
-                dialog.show()
-            }
-            R.id.btn_thu -> {//다이얼로그 생성 전에 이미 저장되어 있는 데이터 삭제
-                dialogList.removeAll(dialogList)
-                //다이얼로그에 저장할 데이터 저장
-                for (i in 0..thursdaySubjectList.size - 1) {
-                    dialogList.add(thursdaySubjectList.get(i))
-                }
-                //어댑터 리스트 갱신
-                arrayAdapter.notifyDataSetChanged()
-                //다이얼로그 생성
-                val builder = AlertDialog.Builder(this)
-                builder.setTitle("입력할 과목을 선택해 주세요.")
-                //다이얼로그와 어댑터를 연결하고 과목 선택시 이벤트 발생
-                builder.setAdapter(arrayAdapter, object : DialogInterface.OnClickListener {
-                    override fun onClick(dialog: DialogInterface?, which: Int) {
-                        if (selectListThu!!.size > 0) {
-                            for (index in 0..selectListThu!!.size - 1) {
-                                var oldDataStartTime = selectListThu!!.get(index).starttime
-                                var oldDataEndTime = selectListThu!!.get(index).endtime
-                                var newDataStartTime = dialogList[which].starttime
-                                var newDataEndTime = dialogList[which].endtime
-
-                                if (newDataStartTime!! >= oldDataStartTime!! && newDataStartTime!! <= oldDataEndTime!!) {
-                                    Toast.makeText(
-                                        this@ScheduleActivity,
-                                        "중복된 시간을 선택하셨습니다.\n선택한 과목으로 변경합니다.",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    selectListThu!!.removeAt(index)
-                                    selectListThu!!.add(dialogList[which])
-                                } else if (newDataEndTime!! >= oldDataStartTime!! && newDataEndTime!! <= oldDataEndTime!!) {
-                                    Toast.makeText(
-                                        this@ScheduleActivity,
-                                        "중복된 시간을 선택하셨습니다.\n선택한 과목으로 변경합니다.",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    selectListThu!!.removeAt(index)
-                                    selectListThu!!.add(dialogList[which])
-
-                                } else {
-                                    selectListThu!!.add(dialogList[which])
-
-                                }
-                            }
-                        } else {
-                            selectListThu!!.add(dialogList[which])
-                        }
-
-                        Log.d("list", selectListThu!!.size.toString())
-                        //각각 view를 가져와서 데이터를 저장할 준비
-                        val scheduleList = intArrayOf(
-                            R.id.text1049, R.id.text10410, R.id.text10411,
-                            R.id.text10412, R.id.text10413, R.id.text10414,
-                            R.id.text10415, R.id.text10416, R.id.text10417, R.id.text10418
-                        )
-                        //데이터 초기화
-                        for (delIndex in 0..scheduleList.size - 1) {
-                            var text = findViewById<TextView>(scheduleList[delIndex])
-                            text.text = ""
-                            text.setBackgroundColor(Color.parseColor("#00ff0000"))
-
-                        }
-                        //각각의 view에 데이터 저장
-                        for (i in 0..selectListThu!!.size - 1) {
-                            var start = selectListThu!!.get(i).starttime!!
-                            var end = selectListThu!!.get(i).endtime!!
-                            for (j in start!!..end!!) {
-                                val index = j - 9
-                                var textViewId = scheduleList.get(index)
-                                var text = findViewById<TextView>(textViewId)
-                                text.text = selectListThu!!.get(i).subjectname
-                                text.setBackgroundColor(Color.parseColor(selectListThu!!.get(i).color.toString()))
-
-                            }
-                        }
-                    }
-
-                })
-                var dialog = builder.create()
-                dialog.show()
-            }
-            R.id.btn_fri -> {
-                //다이얼로그 생성 전에 이미 저장되어 있는 데이터 삭제
-                dialogList.removeAll(dialogList)
-                //다이얼로그에 저장할 데이터 저장
-                for (i in 0..fridaySubjectList.size - 1) {
-                    dialogList.add(fridaySubjectList.get(i))
-                }
-                //어댑터 리스트 갱신
-                arrayAdapter.notifyDataSetChanged()
-                //다이얼로그 생성
-                val builder = AlertDialog.Builder(this)
-                builder.setTitle("입력할 과목을 선택해 주세요.")
-                //다이얼로그와 어댑터를 연결하고 과목 선택시 이벤트 발생
-                builder.setAdapter(arrayAdapter, object : DialogInterface.OnClickListener {
-                    override fun onClick(dialog: DialogInterface?, which: Int) {
-                        if (selectListFri!!.size > 0) {
-                            for (index in 0..selectListFri!!.size - 1) {
-                                var oldDataStartTime = selectListFri!!.get(index).starttime
-                                var oldDataEndTime = selectListFri!!.get(index).endtime
-                                var newDataStartTime = dialogList[which].starttime
-                                var newDataEndTime = dialogList[which].endtime
-
-                                if (newDataStartTime!! >= oldDataStartTime!! && newDataStartTime!! <= oldDataEndTime!!) {
-                                    Toast.makeText(
-                                        this@ScheduleActivity,
-                                        "중복된 시간을 선택하셨습니다.\n선택한 과목으로 변경합니다.",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    selectListFri!!.removeAt(index)
-                                    selectListFri!!.add(dialogList[which])
-                                } else if (newDataEndTime!! >= oldDataStartTime!! && newDataEndTime!! <= oldDataEndTime!!) {
-                                    Toast.makeText(
-                                        this@ScheduleActivity,
-                                        "중복된 시간을 선택하셨습니다.\n선택한 과목으로 변경합니다.",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    selectListFri!!.removeAt(index)
-                                    selectListFri!!.add(dialogList[which])
-
-                                } else {
-                                    selectListFri!!.add(dialogList[which])
-
-                                }
-                            }
-                        } else {
-                            selectListFri!!.add(dialogList[which])
-                        }
-
-                        Log.d("list", selectListFri!!.size.toString())
-                        //각각 view를 가져와서 데이터를 저장할 준비
-                        val scheduleList = intArrayOf(
-                            R.id.text1059, R.id.text10510, R.id.text10511,
-                            R.id.text10512, R.id.text10513, R.id.text10514,
-                            R.id.text10515, R.id.text10516, R.id.text10517, R.id.text10518
-                        )
-                        //데이터 초기화
-                        for (delIndex in 0..scheduleList.size - 1) {
-                            var text = findViewById<TextView>(scheduleList[delIndex])
-                            text.text = ""
-                            text.setBackgroundColor(Color.parseColor("#00ff0000"))
-
-                        }
-                        //각각의 view에 데이터 저장
-                        for (i in 0..selectListFri!!.size - 1) {
-                            var start = selectListFri!!.get(i).starttime!!
-                            var end = selectListFri!!.get(i).endtime!!
-                            for (j in start!!..end!!) {
-                                val index = j - 9
-                                var textViewId = scheduleList.get(index)
-                                var text = findViewById<TextView>(textViewId)
-                                text.text = selectListFri!!.get(i).subjectname
-                                text.setBackgroundColor(Color.parseColor(selectListFri!!.get(i).color.toString()))
-                            }
-                        }
-                    }
-
-                })
-                var dialog = builder.create()
-                dialog.show()
-            }
-
+            R.id.btn_mon -> mondaySchedule(mondaySubjectList!!)
+            R.id.btn_tue -> tuesdaySchedule(tuesdaySubjectList!!)
+            R.id.btn_wed -> wednesdaySchedule(wednesdaySubjectList!!)
+            R.id.btn_thu -> thursdaySchedule(thursdaySubjectList!!)
+            R.id.btn_fri -> fridaySchedule(fridaySubjectList!!)
             else -> return
         }
 
 
     }
 
-    companion object {
+    fun mondaySchedule(schedule: ArrayList<Subject>) {
+        //다이얼로그 생성 전에 이미 저장되어 있는 데이터 삭제
+        dialogList.removeAll(dialogList)
+        //다이얼로그에 저장할 데이터 저장
+        for (i in 0..schedule.size - 1) {
+            dialogList.add(schedule.get(i))
+        }
+        //어댑터 리스트 갱신
+        arrayAdapter.notifyDataSetChanged()
+        //다이얼로그 생성
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("입력할 과목을 선택해 주세요.")
+        //다이얼로그와 어댑터를 연결하고 과목 선택시 이벤트 발생
+        builder.setAdapter(arrayAdapter, object : DialogInterface.OnClickListener {
+            override fun onClick(dialog: DialogInterface?, which: Int) {
+                if (selectListMon!!.size > 0) {
+                    for (index in 0..selectListMon!!.size - 1) {
+                        var oldDataStartTime = selectListMon!!.get(index).starttime
+                        var oldDataEndTime = selectListMon!!.get(index).endtime
+                        var newDataStartTime = dialogList[which].starttime
+                        var newDataEndTime = dialogList[which].endtime
 
+                        if (newDataStartTime!! >= oldDataStartTime!! && newDataStartTime!! <= oldDataEndTime!!) {
+                            Toast.makeText(
+                                this@ScheduleActivity,
+                                "중복된 시간을 선택하셨습니다.\n선택한 과목으로 변경합니다.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            selectListMon!!.removeAt(index)
+                            selectListMon!!.add(dialogList[which])
+                        } else if (newDataEndTime!! >= oldDataStartTime!! && newDataEndTime!! <= oldDataEndTime!!) {
+                            Toast.makeText(
+                                this@ScheduleActivity,
+                                "중복된 시간을 선택하셨습니다.\n선택한 과목으로 변경합니다.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            selectListMon!!.removeAt(index)
+                            selectListMon!!.add(dialogList[which])
 
+                        } else {
+                            selectListMon!!.add(dialogList[which])
+
+                        }
+                    }
+                } else {
+                    selectListMon!!.add(dialogList[which])
+                }
+
+                //각각 view를 가져와서 데이터를 저장할 준비
+                val scheduleList = intArrayOf(
+                    R.id.text1019, R.id.text10110, R.id.text10111,
+                    R.id.text10112, R.id.text10113, R.id.text10114,
+                    R.id.text10115, R.id.text10116, R.id.text10117, R.id.text10118
+                )
+                //데이터 초기화
+                for (delIndex in 0..scheduleList.size.minus(1)) {
+                    var text = findViewById<TextView>(scheduleList[delIndex])
+                    text.text = ""
+                    text.setBackgroundColor(Color.parseColor("#00ff0000"))
+                }
+                //각각의 view에 데이터 저장
+                for (i in 0..selectListMon!!.size.minus(1)) {
+                    var start = selectListMon!!.get(i).starttime!!
+                    var end = selectListMon!!.get(i).endtime!!
+                    for (j in start!!..end!!) {
+                        val index = j - 9
+                        var textViewId = scheduleList.get(index)
+                        var text = findViewById<TextView>(textViewId)
+                        text.text = selectListMon!!.get(i).subjectname
+                        text.setBackgroundColor(Color.parseColor(selectListMon!!.get(i).color.toString()))
+                    }
+                }
+            }
+
+        })
+        var dialog = builder.create()
+        dialog.show()
+    }
+
+    fun tuesdaySchedule(schedule: ArrayList<Subject>) {
+        //다이얼로그 생성 전에 이미 저장되어 있는 데이터 삭제
+        dialogList.removeAll(dialogList)
+        //다이얼로그에 저장할 데이터 저장
+        for (i in 0..schedule.size - 1) {
+            dialogList.add(schedule.get(i))
+        }
+        //어댑터 리스트 갱신
+        arrayAdapter.notifyDataSetChanged()
+        //다이얼로그 생성
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("입력할 과목을 선택해 주세요.")
+        //다이얼로그와 어댑터를 연결하고 과목 선택시 이벤트 발생
+        builder.setAdapter(arrayAdapter, object : DialogInterface.OnClickListener {
+            override fun onClick(dialog: DialogInterface?, which: Int) {
+                if (selectListTue!!.size > 0) {
+                    for (index in 0..selectListTue!!.size - 1) {
+                        var oldDataStartTime = selectListTue!!.get(index).starttime
+                        var oldDataEndTime = selectListTue!!.get(index).endtime
+                        var newDataStartTime = dialogList[which].starttime
+                        var newDataEndTime = dialogList[which].endtime
+
+                        if (newDataStartTime!! >= oldDataStartTime!! && newDataStartTime!! <= oldDataEndTime!!) {
+                            Toast.makeText(
+                                this@ScheduleActivity,
+                                "중복된 시간을 선택하셨습니다.\n선택한 과목으로 변경합니다.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            selectListTue!!.removeAt(index)
+                            selectListTue!!.add(dialogList[which])
+                        } else if (newDataEndTime!! >= oldDataStartTime!! && newDataEndTime!! <= oldDataEndTime!!) {
+                            Toast.makeText(
+                                this@ScheduleActivity,
+                                "중복된 시간을 선택하셨습니다.\n선택한 과목으로 변경합니다.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            selectListTue!!.removeAt(index)
+                            selectListTue!!.add(dialogList[which])
+
+                        } else {
+                            selectListTue!!.add(dialogList[which])
+
+                        }
+                    }
+                } else {
+                    selectListTue!!.add(dialogList[which])
+                }
+
+                Log.d("list", selectListTue!!.size.toString())
+                //각각 view를 가져와서 데이터를 저장할 준비
+                val scheduleList = intArrayOf(
+                    R.id.text1029, R.id.text10210, R.id.text10211,
+                    R.id.text10212, R.id.text10213, R.id.text10214,
+                    R.id.text10215, R.id.text10216, R.id.text10217, R.id.text10218
+                )
+                //데이터 초기화
+                for (delIndex in 0..scheduleList.size - 1) {
+                    var text = findViewById<TextView>(scheduleList[delIndex])
+                    text.text = ""
+                    text.setBackgroundColor(Color.parseColor("#00ff0000"))
+
+                }
+                //각각의 view에 데이터 저장
+                for (i in 0..selectListTue!!.size - 1) {
+                    var start = selectListTue!!.get(i).starttime!!
+                    var end = selectListTue!!.get(i).endtime!!
+                    for (j in start!!..end!!) {
+                        val index = j - 9
+                        var textViewId = scheduleList.get(index)
+                        var text = findViewById<TextView>(textViewId)
+                        text.text = selectListTue!!.get(i).subjectname
+                        text.setBackgroundColor(Color.parseColor(selectListTue!!.get(i).color.toString()))
+                    }
+                }
+            }
+
+        })
+        var dialog = builder.create()
+        dialog.show()
+    }
+
+    fun wednesdaySchedule(schedule: ArrayList<Subject>) {
+        //다이얼로그 생성 전에 이미 저장되어 있는 데이터 삭제
+        dialogList.removeAll(dialogList)
+        //다이얼로그에 저장할 데이터 저장
+        for (i in 0..schedule.size - 1) {
+            dialogList.add(schedule.get(i))
+        }
+        //어댑터 리스트 갱신
+        arrayAdapter.notifyDataSetChanged()
+        //다이얼로그 생성
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("입력할 과목을 선택해 주세요.")
+        //다이얼로그와 어댑터를 연결하고 과목 선택시 이벤트 발생
+        builder.setAdapter(arrayAdapter, object : DialogInterface.OnClickListener {
+            override fun onClick(dialog: DialogInterface?, which: Int) {
+                if (selectListWed!!.size > 0) {
+                    for (index in 0..selectListWed!!.size - 1) {
+                        var oldDataStartTime = selectListWed!!.get(index).starttime
+                        var oldDataEndTime = selectListWed!!.get(index).endtime
+                        var newDataStartTime = dialogList[which].starttime
+                        var newDataEndTime = dialogList[which].endtime
+
+                        if (newDataStartTime!! >= oldDataStartTime!! && newDataStartTime!! <= oldDataEndTime!!) {
+                            Toast.makeText(
+                                this@ScheduleActivity,
+                                "중복된 시간을 선택하셨습니다.\n선택한 과목으로 변경합니다.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            selectListWed!!.removeAt(index)
+                            selectListWed!!.add(dialogList[which])
+                        } else if (newDataEndTime!! >= oldDataStartTime!! && newDataEndTime!! <= oldDataEndTime!!) {
+                            Toast.makeText(
+                                this@ScheduleActivity,
+                                "중복된 시간을 선택하셨습니다.\n선택한 과목으로 변경합니다.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            selectListWed!!.removeAt(index)
+                            selectListWed!!.add(dialogList[which])
+
+                        } else {
+                            selectListWed!!.add(dialogList[which])
+
+                        }
+                    }
+                } else {
+                    selectListWed!!.add(dialogList[which])
+                }
+
+                Log.d("list", selectListWed!!.size.toString())
+                //각각 view를 가져와서 데이터를 저장할 준비
+                val scheduleList = intArrayOf(
+                    R.id.text1039, R.id.text10310, R.id.text10311,
+                    R.id.text10312, R.id.text10313, R.id.text10314,
+                    R.id.text10315, R.id.text10316, R.id.text10317, R.id.text10318
+                )
+                //데이터 초기화
+                for (delIndex in 0..scheduleList.size - 1) {
+                    var text = findViewById<TextView>(scheduleList[delIndex])
+                    text.text = ""
+                    text.setBackgroundColor(Color.parseColor("#00ff0000"))
+                }
+                //각각의 view에 데이터 저장
+                for (i in 0..selectListWed!!.size - 1) {
+                    var start = selectListWed!!.get(i).starttime!!
+                    var end = selectListWed!!.get(i).endtime!!
+                    for (j in start!!..end!!) {
+                        val index = j - 9
+                        var textViewId = scheduleList.get(index)
+                        var text = findViewById<TextView>(textViewId)
+                        text.text = selectListWed!!.get(i).subjectname
+                        text.setBackgroundColor(Color.parseColor(selectListWed!!.get(i).color.toString()))
+                    }
+                }
+            }
+
+        })
+        var dialog = builder.create()
+        dialog.show()
+    }
+
+    fun thursdaySchedule(schedule: ArrayList<Subject>) {
+        //다이얼로그 생성 전에 이미 저장되어 있는 데이터 삭제
+        dialogList.removeAll(dialogList)
+        //다이얼로그에 저장할 데이터 저장
+        for (i in 0..schedule.size - 1) {
+            dialogList.add(schedule.get(i))
+        }
+        //어댑터 리스트 갱신
+        arrayAdapter.notifyDataSetChanged()
+        //다이얼로그 생성
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("입력할 과목을 선택해 주세요.")
+        //다이얼로그와 어댑터를 연결하고 과목 선택시 이벤트 발생
+        builder.setAdapter(arrayAdapter, object : DialogInterface.OnClickListener {
+            override fun onClick(dialog: DialogInterface?, which: Int) {
+                if (selectListThu!!.size > 0) {
+                    for (index in 0..selectListThu!!.size - 1) {
+                        var oldDataStartTime = selectListThu!!.get(index).starttime
+                        var oldDataEndTime = selectListThu!!.get(index).endtime
+                        var newDataStartTime = dialogList[which].starttime
+                        var newDataEndTime = dialogList[which].endtime
+
+                        if (newDataStartTime!! >= oldDataStartTime!! && newDataStartTime!! <= oldDataEndTime!!) {
+                            Toast.makeText(
+                                this@ScheduleActivity,
+                                "중복된 시간을 선택하셨습니다.\n선택한 과목으로 변경합니다.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            selectListThu!!.removeAt(index)
+                            selectListThu!!.add(dialogList[which])
+                        } else if (newDataEndTime!! >= oldDataStartTime!! && newDataEndTime!! <= oldDataEndTime!!) {
+                            Toast.makeText(
+                                this@ScheduleActivity,
+                                "중복된 시간을 선택하셨습니다.\n선택한 과목으로 변경합니다.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            selectListThu!!.removeAt(index)
+                            selectListThu!!.add(dialogList[which])
+
+                        } else {
+                            selectListThu!!.add(dialogList[which])
+
+                        }
+                    }
+                } else {
+                    selectListThu!!.add(dialogList[which])
+                }
+
+                Log.d("list", selectListThu!!.size.toString())
+                //각각 view를 가져와서 데이터를 저장할 준비
+                val scheduleList = intArrayOf(
+                    R.id.text1049, R.id.text10410, R.id.text10411,
+                    R.id.text10412, R.id.text10413, R.id.text10414,
+                    R.id.text10415, R.id.text10416, R.id.text10417, R.id.text10418
+                )
+                //데이터 초기화
+                for (delIndex in 0..scheduleList.size - 1) {
+                    var text = findViewById<TextView>(scheduleList[delIndex])
+                    text.text = ""
+                    text.setBackgroundColor(Color.parseColor("#00ff0000"))
+
+                }
+                //각각의 view에 데이터 저장
+                for (i in 0..selectListThu!!.size - 1) {
+                    var start = selectListThu!!.get(i).starttime!!
+                    var end = selectListThu!!.get(i).endtime!!
+                    for (j in start!!..end!!) {
+                        val index = j - 9
+                        var textViewId = scheduleList.get(index)
+                        var text = findViewById<TextView>(textViewId)
+                        text.text = selectListThu!!.get(i).subjectname
+                        text.setBackgroundColor(Color.parseColor(selectListThu!!.get(i).color.toString()))
+
+                    }
+                }
+            }
+
+        })
+        var dialog = builder.create()
+        dialog.show()
+    }
+
+    fun fridaySchedule(schedule: ArrayList<Subject>) {
+        //다이얼로그 생성 전에 이미 저장되어 있는 데이터 삭제
+        dialogList.removeAll(dialogList)
+        //다이얼로그에 저장할 데이터 저장
+        for (i in 0..schedule.size - 1) {
+            dialogList.add(schedule.get(i))
+        }
+        //어댑터 리스트 갱신
+        arrayAdapter.notifyDataSetChanged()
+        //다이얼로그 생성
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("입력할 과목을 선택해 주세요.")
+        //다이얼로그와 어댑터를 연결하고 과목 선택시 이벤트 발생
+        builder.setAdapter(arrayAdapter, object : DialogInterface.OnClickListener {
+            override fun onClick(dialog: DialogInterface?, which: Int) {
+                if (selectListFri!!.size > 0) {
+                    for (index in 0..selectListFri!!.size - 1) {
+                        var oldDataStartTime = selectListFri!!.get(index).starttime
+                        var oldDataEndTime = selectListFri!!.get(index).endtime
+                        var newDataStartTime = dialogList[which].starttime
+                        var newDataEndTime = dialogList[which].endtime
+
+                        if (newDataStartTime!! >= oldDataStartTime!! && newDataStartTime!! <= oldDataEndTime!!) {
+                            Toast.makeText(
+                                this@ScheduleActivity,
+                                "중복된 시간을 선택하셨습니다.\n선택한 과목으로 변경합니다.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            selectListFri!!.removeAt(index)
+                            selectListFri!!.add(dialogList[which])
+                        } else if (newDataEndTime!! >= oldDataStartTime!! && newDataEndTime!! <= oldDataEndTime!!) {
+                            Toast.makeText(
+                                this@ScheduleActivity,
+                                "중복된 시간을 선택하셨습니다.\n선택한 과목으로 변경합니다.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            selectListFri!!.removeAt(index)
+                            selectListFri!!.add(dialogList[which])
+
+                        } else {
+                            selectListFri!!.add(dialogList[which])
+
+                        }
+                    }
+                } else {
+                    selectListFri!!.add(dialogList[which])
+                }
+
+                Log.d("list", selectListFri!!.size.toString())
+                //각각 view를 가져와서 데이터를 저장할 준비
+                val scheduleList = intArrayOf(
+                    R.id.text1059, R.id.text10510, R.id.text10511,
+                    R.id.text10512, R.id.text10513, R.id.text10514,
+                    R.id.text10515, R.id.text10516, R.id.text10517, R.id.text10518
+                )
+                //데이터 초기화
+                for (delIndex in 0..scheduleList.size - 1) {
+                    var text = findViewById<TextView>(scheduleList[delIndex])
+                    text.text = ""
+                    text.setBackgroundColor(Color.parseColor("#00ff0000"))
+
+                }
+                //각각의 view에 데이터 저장
+                for (i in 0..selectListFri!!.size - 1) {
+                    var start = selectListFri!!.get(i).starttime!!
+                    var end = selectListFri!!.get(i).endtime!!
+                    for (j in start!!..end!!) {
+                        val index = j - 9
+                        var textViewId = scheduleList.get(index)
+                        var text = findViewById<TextView>(textViewId)
+                        text.text = selectListFri!!.get(i).subjectname
+                        text.setBackgroundColor(Color.parseColor(selectListFri!!.get(i).color.toString()))
+                    }
+                }
+            }
+
+        })
+        var dialog = builder.create()
+        dialog.show()
     }
 
 }
