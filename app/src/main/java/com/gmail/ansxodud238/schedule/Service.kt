@@ -37,8 +37,8 @@ interface Service {
     @GET("/api/schedule/{userid}")
     fun userHasSchedule(@Path("userid")userid : Int) : Call<ArrayList<Subject>>
 
-    @GET("/api/schedule")
-    fun userData(@Body userDataSend: ArrayList<UserDataSend>) : Call<UserResponse>
+    @POST("/api/schedule")
+    fun userData(@Body schedulelist:  ArrayList<UserDataSend>) : Call<UserResponse>
 
 
 

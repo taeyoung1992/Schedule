@@ -127,6 +127,7 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
                 userData.subjectid = sendList!![i].subjectid
                 userData.userid = userid
                 sendListPorm!!.add(userData)
+                Log.d("send",sendListPorm!!.joinToString())
             }
             service.userData(sendListPorm!!).enqueue(object : Callback<UserResponse> {
                 override fun onFailure(call: Call<UserResponse>, t: Throwable) {
