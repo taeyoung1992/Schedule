@@ -2,8 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.gmail.ansxodud238.schedule">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -13,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ScheduleActivity"></activity>
+        <activity android:name=".MyScheduleActivity"></activity>
+        <activity android:name=".ScheduleActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".BlankActivity" />
         <activity android:name=".MainActivity">

@@ -196,183 +196,23 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
                     thursdaySubjectList = ArrayList()
                     fridaySubjectList = ArrayList()
 
-                    for (i in 0..mySubjectList!!.size - 1) {
-                        if (mySubjectList?.get(i)?.wday == 101) {
-
-                            mondaySubjectList?.add(mySubjectList!!.get(i))
-                            //각각 view를 가져와서 데이터를 저장할 준비
-                            val scheduleList = intArrayOf(
-                                R.id.text1019, R.id.text10110, R.id.text10111,
-                                R.id.text10112, R.id.text10113, R.id.text10114,
-                                R.id.text10115, R.id.text10116, R.id.text10117, R.id.text10118
-                            )
-                            //데이터 초기화
-                            for (delIndex in 0..scheduleList.size.minus(1)) {
-                                var text = findViewById<TextView>(scheduleList[delIndex])
-                                text.text = ""
-                                text.setBackgroundColor(Color.parseColor("#00ff0000"))
-                            }
-                            //각각의 view에 데이터 저장
-                            for (i in 0..mondaySubjectList!!.size.minus(1)) {
-                                var start = mondaySubjectList!!.get(i).starttime!!
-                                var end = mondaySubjectList!!.get(i).endtime!!
-                                for (j in start!!..end!!) {
-                                    val index = j - 9
-                                    var textViewId = scheduleList.get(index)
-                                    var text = findViewById<TextView>(textViewId)
-                                    text.text = mondaySubjectList!!.get(i).subjectname
-                                    text.setBackgroundColor(
-                                        Color.parseColor(
-                                            mondaySubjectList!!.get(
-                                                i
-                                            ).color.toString()
-                                        )
-                                    )
-                                }
-                            }
-
+                    mySubjectList!!.forEach {
+                        if(it.wday == 101){
+                            mondaySubjectList.add(it)
+                            initWdayLine(it.wday!!, mondaySubjectList)
+                        }else if(it.wday == 102){
+                            tuesdaySubjectList.add(it)
+                            initWdayLine(it.wday!!, tuesdaySubjectList)
+                        }else if(it.wday == 103){
+                            wednesdaySubjectList.add(it)
+                            initWdayLine(it.wday!!, wednesdaySubjectList)
+                        }else if(it.wday == 104){
+                            thursdaySubjectList.add(it)
+                            initWdayLine(it.wday!!, thursdaySubjectList)
+                        }else if(it.wday == 105){
+                            fridaySubjectList.add(it)
+                            initWdayLine(it.wday!!, fridaySubjectList)
                         }
-                        if (mySubjectList?.get(i)?.wday == 102) {
-
-                            tuesdaySubjectList?.add(mySubjectList!!.get(i))
-                            //각각 view를 가져와서 데이터를 저장할 준비
-                            val scheduleList = intArrayOf(
-                                R.id.text1029, R.id.text10210, R.id.text10211,
-                                R.id.text10212, R.id.text10213, R.id.text10214,
-                                R.id.text10215, R.id.text10216, R.id.text10217, R.id.text10218
-                            )
-                            //데이터 초기화
-                            for (delIndex in 0..scheduleList.size.minus(1)) {
-                                var text = findViewById<TextView>(scheduleList[delIndex])
-                                text.text = ""
-                                text.setBackgroundColor(Color.parseColor("#00ff0000"))
-                            }
-                            //각각의 view에 데이터 저장
-                            for (i in 0..tuesdaySubjectList!!.size.minus(1)) {
-                                var start = tuesdaySubjectList!!.get(i).starttime!!
-                                var end = tuesdaySubjectList!!.get(i).endtime!!
-                                for (j in start!!..end!!) {
-                                    val index = j - 9
-                                    var textViewId = scheduleList.get(index)
-                                    var text = findViewById<TextView>(textViewId)
-                                    text.text = tuesdaySubjectList!!.get(i).subjectname
-                                    text.setBackgroundColor(
-                                        Color.parseColor(
-                                            tuesdaySubjectList!!.get(
-                                                i
-                                            ).color.toString()
-                                        )
-                                    )
-                                }
-                            }
-
-                        }
-                        if (mySubjectList?.get(i)?.wday == 103) {
-
-                            wednesdaySubjectList?.add(mySubjectList!!.get(i))
-                            //각각 view를 가져와서 데이터를 저장할 준비
-                            val scheduleList = intArrayOf(
-                                R.id.text1039, R.id.text10310, R.id.text10311,
-                                R.id.text10312, R.id.text10313, R.id.text10314,
-                                R.id.text10315, R.id.text10316, R.id.text10317, R.id.text10318
-                            )
-                            //데이터 초기화
-                            for (delIndex in 0..scheduleList.size.minus(1)) {
-                                var text = findViewById<TextView>(scheduleList[delIndex])
-                                text.text = ""
-                                text.setBackgroundColor(Color.parseColor("#00ff0000"))
-                            }
-                            //각각의 view에 데이터 저장
-                            for (i in 0..wednesdaySubjectList!!.size.minus(1)) {
-                                var start = wednesdaySubjectList!!.get(i).starttime!!
-                                var end = wednesdaySubjectList!!.get(i).endtime!!
-                                for (j in start!!..end!!) {
-                                    val index = j - 9
-                                    var textViewId = scheduleList.get(index)
-                                    var text = findViewById<TextView>(textViewId)
-                                    text.text = wednesdaySubjectList!!.get(i).subjectname
-                                    text.setBackgroundColor(
-                                        Color.parseColor(
-                                            wednesdaySubjectList!!.get(
-                                                i
-                                            ).color.toString()
-                                        )
-                                    )
-                                }
-                            }
-
-                        }
-                        if (mySubjectList?.get(i)?.wday == 104) {
-
-                            thursdaySubjectList?.add(mySubjectList!!.get(i))
-                            //각각 view를 가져와서 데이터를 저장할 준비
-                            val scheduleList = intArrayOf(
-                                R.id.text1049, R.id.text10410, R.id.text10411,
-                                R.id.text10412, R.id.text10413, R.id.text10414,
-                                R.id.text10415, R.id.text10416, R.id.text10417, R.id.text10418
-                            )
-                            //데이터 초기화
-                            for (delIndex in 0..scheduleList.size.minus(1)) {
-                                var text = findViewById<TextView>(scheduleList[delIndex])
-                                text.text = ""
-                                text.setBackgroundColor(Color.parseColor("#00ff0000"))
-                            }
-                            //각각의 view에 데이터 저장
-                            for (i in 0..thursdaySubjectList!!.size.minus(1)) {
-                                var start = thursdaySubjectList!!.get(i).starttime!!
-                                var end = thursdaySubjectList!!.get(i).endtime!!
-                                for (j in start!!..end!!) {
-                                    val index = j - 9
-                                    var textViewId = scheduleList.get(index)
-                                    var text = findViewById<TextView>(textViewId)
-                                    text.text = thursdaySubjectList!!.get(i).subjectname
-                                    text.setBackgroundColor(
-                                        Color.parseColor(
-                                            thursdaySubjectList!!.get(
-                                                i
-                                            ).color.toString()
-                                        )
-                                    )
-                                }
-                            }
-
-                        }
-                        if (mySubjectList?.get(i)?.wday == 105) {
-
-                            fridaySubjectList?.add(mySubjectList!!.get(i))
-                            //각각 view를 가져와서 데이터를 저장할 준비
-                            val scheduleList = intArrayOf(
-                                R.id.text1059, R.id.text10510, R.id.text10511,
-                                R.id.text10512, R.id.text10513, R.id.text10514,
-                                R.id.text10515, R.id.text10516, R.id.text10517, R.id.text10518
-                            )
-                            //데이터 초기화
-                            for (delIndex in 0..scheduleList.size.minus(1)) {
-                                var text = findViewById<TextView>(scheduleList[delIndex])
-                                text.text = ""
-                                text.setBackgroundColor(Color.parseColor("#00ff0000"))
-                            }
-                            //각각의 view에 데이터 저장
-                            for (i in 0..fridaySubjectList!!.size.minus(1)) {
-                                var start = fridaySubjectList!!.get(i).starttime!!
-                                var end = fridaySubjectList!!.get(i).endtime!!
-                                for (j in start!!..end!!) {
-                                    val index = j - 9
-                                    var textViewId = scheduleList.get(index)
-                                    var text = findViewById<TextView>(textViewId)
-                                    text.text = fridaySubjectList!!.get(i).subjectname
-                                    text.setBackgroundColor(
-                                        Color.parseColor(
-                                            fridaySubjectList!!.get(
-                                                i
-                                            ).color.toString()
-                                        )
-                                    )
-                                }
-                            }
-
-                        }
-
                     }
 
                 }
@@ -383,13 +223,46 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
+    fun initWdayLine(wday : Int,dayList : ArrayList<Subject>){
+
+        Log.d("dayList",dayList.joinToString())
+
+        var scheduleList = ArrayList<TextView>()
+        for(i in 9 .. 18){
+            var textId = "text"+wday+i
+            var resId = resources.getIdentifier(textId,"id",packageName)
+            scheduleList.add(findViewById(resId))
+        }
+
+        scheduleList.forEach{
+            it.text = ""
+            it.setBackgroundColor(Color.parseColor("#00ff0000"))
+        }
+        dayList.forEach {
+            var start = it.starttime
+            var end = it.endtime
+            for(i in start!!..end!!){
+                var timeView = scheduleList.get(i-9)
+
+                timeView.text = it.subjectname
+                timeView.setBackgroundColor(Color.parseColor(it.color!!))
+            }
+        }
+
+
+    }
+
     //요일 버튼에 이벤트 연결
     fun initButtonOnClickListener() {
-        btn_mon.setOnClickListener(this)
-        btn_tue.setOnClickListener(this)
-        btn_wed.setOnClickListener(this)
-        btn_thu.setOnClickListener(this)
-        btn_fri.setOnClickListener(this)
+//        btn_mon.setOnClickListener(this)
+//        btn_tue.setOnClickListener(this)
+//        btn_wed.setOnClickListener(this)
+//        btn_thu.setOnClickListener(this)
+//        btn_fri.setOnClickListener(this)
+
+    }
+
+    fun removeAllData(){
 
 
     }
@@ -492,9 +365,11 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
                     var text = findViewById<TextView>(scheduleList[delIndex])
                     text.text = ""
                     text.setBackgroundColor(Color.parseColor("#00ff0000"))
+                    Log.d("text",text.text.toString())
                 }
                 //각각의 view에 데이터 저장
                 for (i in 0..selectListMon!!.size.minus(1)) {
+                    Log.d("selectListMon",selectListMon!!.joinToString())
                     var start = selectListMon!!.get(i).starttime!!
                     var end = selectListMon!!.get(i).endtime!!
                     for (j in start!!..end!!) {
@@ -503,6 +378,7 @@ class ScheduleActivity : AppCompatActivity(), View.OnClickListener {
                         var text = findViewById<TextView>(textViewId)
                         text.text = selectListMon!!.get(i).subjectname
                         text.setBackgroundColor(Color.parseColor(selectListMon!!.get(i).color.toString()))
+
                     }
                 }
             }

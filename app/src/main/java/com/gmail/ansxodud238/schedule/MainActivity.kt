@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
                     val idCheck = response.body()?.result
                     if(idCheck == 1){
                         Toast.makeText(this@MainActivity,"로그인 성공!",Toast.LENGTH_SHORT).show()
-                        val intent = Intent(this@MainActivity,ScheduleActivity::class.java)
+                        val intent = Intent(this@MainActivity,MyScheduleActivity::class.java)
                         intent.putExtra("userid",response.body()?.user?.userid.toString())
                         startActivity(intent)
                     }else{

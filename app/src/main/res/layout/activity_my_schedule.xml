@@ -40,7 +40,7 @@
                     android:textStyle="bold" />
 
                 <Button
-                    android:id="@+id/btn_mon1"
+                    android:id="@+id/btn_mon"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -52,7 +52,7 @@
                     android:textStyle="bold" />
 
                 <Button
-                    android:id="@+id/btn_tue1"
+                    android:id="@+id/btn_tue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -64,7 +64,7 @@
                     android:textStyle="bold" />
 
                 <Button
-                    android:id="@+id/btn_wed1"
+                    android:id="@+id/btn_wed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -76,7 +76,7 @@
                     android:textStyle="bold" />
 
                 <Button
-                    android:id="@+id/btn_thu1"
+                    android:id="@+id/btn_thu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -88,7 +88,7 @@
                     android:textStyle="bold" />
 
                 <Button
-                    android:id="@+id/btn_fri1"
+                    android:id="@+id/btn_fri"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
