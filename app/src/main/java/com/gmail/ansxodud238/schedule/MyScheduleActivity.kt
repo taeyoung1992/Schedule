@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import com.gmail.ansxodud238.schedule.data.Subject
 import kotlinx.android.synthetic.main.activity_my_schedule.*
 import okhttp3.OkHttpClient
+import okhttp3.internal.Util.indexOf
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -49,9 +50,8 @@ class MyScheduleActivity : AppCompatActivity(), View.OnClickListener {
 
         var service = retrofit.create(Service::class.java)
 
-        allSubjectList = getSubjectList(service)
-        Log.d("all",allSubjectList!!.joinToString())
-        myScheduleList = getScheduleList(service)
+        getSubjectList(service)
+        getScheduleList(service)
 
         initOnClickListener()
 
@@ -71,81 +71,127 @@ class MyScheduleActivity : AppCompatActivity(), View.OnClickListener {
         var buttonId = v?.id
         when(buttonId){
             R.id.btn_mon -> {
-                Log.d("all",allSubjectList!!.joinToString())
                 var list = getSubjectByWday(101,allSubjectList!!)
 
+
                 drawDialogByWday(list)
-                Log.d("myschedule",myScheduleList!!.joinToString())
+
+
 
             }
             R.id.btn_tue -> {
+                var list = getSubjectByWday(102,allSubjectList!!)
+
+
+                drawDialogByWday(list)
 
             }
             R.id.btn_wed -> {
+                var list = getSubjectByWday(103,allSubjectList!!)
+
+
+                drawDialogByWday(list)
 
             }
             R.id.btn_thu -> {
+                var list = getSubjectByWday(104,allSubjectList!!)
+
+
+                drawDialogByWday(list)
 
             }
             R.id.btn_fri -> {
+                var list = getSubjectByWday(105,allSubjectList!!)
+
+
+                drawDialogByWday(list)
 
             }
         }
+
+
     }
 
     //전체 삭제(MySchedule, AllView)
     fun wipeAll(){
         myScheduleList = null
-        wipeTable()
+        myScheduleList!!.forEach {
+            wipeTable(it.wday!!)
+        }
 
     }
     //view 삭제(요일별 view 삭제)
-    fun wipeTable(){
-
+    fun wipeTable(wday: Int){
+        myScheduleList!!.forEach {
+            if(it.wday == wday){
+                var textViewList = getWdayTextView(wday)
+                textViewList.forEach {
+                    it.text = ""
+                    it.setBackgroundColor(Color.parseColor("#00ff0000"))
+                }
+            }
+        }
+    }
+    //요일에 해당하는 textview id 가져오기
+    fun getWdayTextView(wday: Int) : ArrayList<TextView>{
+        var textViewList = ArrayList<TextView>()
+        for(i in 9 .. 18){
+            var textId = "text"+wday+i
+            var resId = resources.getIdentifier(textId,"id",packageName)
+            textViewList.add(findViewById(resId))
+        }
+        return textViewList
     }
     //onCreate 접근시 전체 과목 받아오기
-    fun getSubjectList(service : Service) : ArrayList<Subject>{
-        var subjectList = ArrayList<Subject>()
+    fun getSubjectList(service : Service){
         service.getSubejctData().enqueue(object : Callback<ArrayList<Subject>>{
             override fun onResponse(
                 call: Call<ArrayList<Subject>>,
                 response: Response<ArrayList<Subject>>
             ) {
-                subjectList = response.body()!!
+                allSubjectList = response.body()!!
                 Log.d("getSubjectList","전 과목 목록 받아오기 성공")
+
             }
 
             override fun onFailure(call: Call<ArrayList<Subject>>, t: Throwable) {
                 Log.d("getSubjectList","전 과목 목록 받아오기 실패")
             }
         })
-        return subjectList
 
     }
     //onCreate 접근시 내 스케줄 받아오기
-    fun getScheduleList(service: Service) : ArrayList<Subject>{
+    fun getScheduleList(service: Service){
         var intent = intent
         var userId = intent.getStringExtra("userid").toInt()
-        var scheduleList = ArrayList<Subject>()
         service.userHasSchedule(userId).enqueue(object : Callback<ArrayList<Subject>>{
+            override fun onResponse(
+                call: Call<ArrayList<Subject>>,
+                response: Response<ArrayList<Subject>>
+            ){
+                myScheduleList = response.body()!!
+                Log.d("getScheduleList","내 스케줄 받아오기 성공")
+            }
             override fun onFailure(call: Call<ArrayList<Subject>>, t: Throwable) {
                 Log.d("getScheduleList","내 스케줄 받아오기 실패")
             }
 
-            override fun onResponse(
-                call: Call<ArrayList<Subject>>,
-                response: Response<ArrayList<Subject>>
-            ) {
-                scheduleList = response.body()!!
-                Log.d("getScheduleList","내 스케줄 받아오기 성공")
-            }
         })
-
-        return scheduleList
 
     }
     //내 스케쥴 그리기
     fun drawTable(subjectList : ArrayList<Subject>){
+        if(subjectList.size>0){
+            subjectList.forEach {
+                var startTime = it.starttime
+                var endTime = it.endtime
+                var textViewList = getWdayTextView(it.wday!!)
+                for(i in startTime!!..endTime!!){
+                    textViewList[i-9].text = it.subjectname
+                    textViewList[i-9].setBackgroundColor(Color.parseColor(it.color!!))
+                }
+            }
+        }
 
     }
     //요일별로 보여줄 리스트 반환
@@ -171,46 +217,55 @@ class MyScheduleActivity : AppCompatActivity(), View.OnClickListener {
         builder.setTitle("과목을 선택해 주세요")
         builder.setAdapter(dialogAdapter,object : DialogInterface.OnClickListener{
             override fun onClick(dialog: DialogInterface?, which: Int) {
-                myScheduleList!!.forEach {
+                if(myScheduleList!!.size>0) {
+                    for (obj in myScheduleList!!) {
+                        var myStartTime = obj.starttime
+                        var myEndTime = obj.endtime
+                        var choiceStartTime = list[which].starttime
+                        var choiceEndTime = list[which].endtime
+                        var index = which
+                        if (choiceStartTime!! >= myStartTime!! && choiceStartTime!! <= myEndTime!! || choiceEndTime!! >= myStartTime!! && choiceEndTime!! <= myEndTime!!) {
+                            val changeBuilder = AlertDialog.Builder(this@MyScheduleActivity)
+                            changeBuilder.setTitle("겹치는 시간표 입니다.")
+                            changeBuilder.setMessage("선택한 과목으로 변경하시겠습니까?")
+                            changeBuilder.setPositiveButton("예",
+                                object : DialogInterface.OnClickListener {
+                                    override fun onClick(dialog: DialogInterface?, which: Int) {
+                                        myScheduleList!!.removeAt(myScheduleList!!.indexOf(obj))
+                                        myScheduleList!!.add(list[index])
 
+                                        wipeTable(101)
+                                        drawTable(myScheduleList!!)
 
+                                    }
 
-                    if(it.wday == list[which].wday){
-                        var mySubjectStartTime = it.starttime
-                        var mySubjectEndTime = it.endtime
-                        var selectSubjectStartTime = list[which].starttime
-                        var selectSubjectEndTime = list[which].endtime
-
-                        //선택한
-                        if(selectSubjectStartTime!! >= mySubjectStartTime!! && selectSubjectStartTime!! <= mySubjectEndTime!! || selectSubjectEndTime!! >= mySubjectStartTime!! && selectSubjectEndTime!! <= mySubjectEndTime!!){
-                            val builderSelect = AlertDialog.Builder(this@MyScheduleActivity)
-                            builderSelect.setTitle("선택 오류")
-                            builderSelect.setMessage("선택한 과목은 이미 선택한 과목과 시간이 같습니다.\n선택한 과목으로 변경하시겠습니까?")
-                            builder.setPositiveButton("예",object : DialogInterface.OnClickListener{
-                                override fun onClick(dialog: DialogInterface?, which: Int) {
-                                    myScheduleList!!.remove(it)
-                                    myScheduleList!!.add(list[which])
-                                }
-                            })
-                            builder.setNegativeButton("아니오",object : DialogInterface.OnClickListener{
-                                override fun onClick(dialog: DialogInterface?, which: Int) {
-                                }
-                            })
-                            val selectDialog = builderSelect.create()
-                            selectDialog.show()
-                        }else{
+                                })
+                            changeBuilder.setNegativeButton("아니오",
+                                object : DialogInterface.OnClickListener {
+                                    override fun onClick(dialog: DialogInterface?, which: Int) {
+                                    }
+                                })
+                            val changeDialog = changeBuilder.create()
+                            changeDialog.show()
+                        } else {
                             myScheduleList!!.add(list[which])
+                            wipeTable(101)
+                            drawTable(myScheduleList!!)
                         }
-                    }else{
-                        myScheduleList!!.add(list[which])
                     }
-
+                }else{
+                    myScheduleList!!.add(list[which])
+                    wipeTable(101)
+                    drawTable(myScheduleList!!)
                 }
             }
+
         })
 
         val dialog = builder.create()
         dialog.show()
+
+
     }
 
 

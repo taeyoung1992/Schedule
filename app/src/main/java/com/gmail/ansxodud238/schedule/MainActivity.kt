@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
                 .writeTimeout(30, TimeUnit.SECONDS)
                 .build()
 
-            val baseUrl = "http://192.168.0.119:10001"
+            val baseUrl = "http://192.168.0.119:10001/"
 
             var retrofit = Retrofit.Builder().baseUrl(baseUrl)
                 .client(okHttpClient).addConverterFactory(GsonConverterFactory.create())

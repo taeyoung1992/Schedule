@@ -18,26 +18,26 @@ data class UserDataSend(var subjectid : Int? = null, var userid: Int? = null)
 interface Service {
 
     //모든 과목 불러오기
-    @GET("/api/subject")
+    @GET("api/subject")
     fun getSubejctData() : Call<ArrayList<Subject>>
 
 
     //유저회원가입 결과
-    @POST("/api/user")
+    @POST("api/user")
     fun addUser(@Body userInfo: UserInfo) : Call<UserResponse>
 
     //유저아이디 중복검사
-    @POST("/api/user/check")
+    @POST("api/user/check")
     fun userNameCheck(@Body userNameCheck: UserNameCheck) : Call<UserResponse>
 
     //유저 로그인
-    @POST("/api/user/login")
+    @POST("api/user/login")
     fun userLogin(@Body user: UserInfo) : Call<UserLoginResult>
 
-    @GET("/api/schedule/{userid}")
+    @GET("api/schedule/{userid}")
     fun userHasSchedule(@Path("userid")userid : Int) : Call<ArrayList<Subject>>
 
-    @POST("/api/schedule")
+    @POST("api/schedule")
     fun userData(@Body schedulelist:  ArrayList<UserDataSend>) : Call<UserResponse>
 
 
