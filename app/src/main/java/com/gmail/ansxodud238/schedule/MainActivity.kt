@@ -23,10 +23,6 @@ import java.util.concurrent.TimeUnit
 class MainActivity : AppCompatActivity() {
 
 
-
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -39,43 +35,13 @@ class MainActivity : AppCompatActivity() {
             val getUserTypingTextPw = edit_pw.text.toString()
 
 
-            val okHttpClient = OkHttpClient.Builder()
-                .connectTimeout(1, TimeUnit.MINUTES)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .writeTimeout(30, TimeUnit.SECONDS)
-                .build()
-
-            val baseUrl = "http://192.168.0.119:10001/"
-
-            var retrofit = Retrofit.Builder().baseUrl(baseUrl)
-                .client(okHttpClient).addConverterFactory(GsonConverterFactory.create())
-                .build()
-
-            var service = retrofit.create(Service::class.java)
+            val service = initService()
 
             val userInfo = UserInfo()
             userInfo.username = getUserTypingTextId
             userInfo.userpw = getUserTypingTextPw
 
-            service.userLogin(userInfo).enqueue(object : Callback<UserLoginResult>{
-                override fun onFailure(call: Call<UserLoginResult>, t: Throwable) {
-                    Toast.makeText(this@MainActivity,"서버 접속에 실패했습니다.",Toast.LENGTH_SHORT).show()
-                }
-                override fun onResponse(
-                    call: Call<UserLoginResult>,
-                    response: Response<UserLoginResult>
-                ) {
-                    val idCheck = response.body()?.result
-                    if(idCheck == 1){
-                        Toast.makeText(this@MainActivity,"로그인 성공!",Toast.LENGTH_SHORT).show()
-                        val intent = Intent(this@MainActivity,MyScheduleActivity::class.java)
-                        intent.putExtra("userid",response.body()?.user?.userid.toString())
-                        startActivity(intent)
-                    }else{
-                        Toast.makeText(this@MainActivity,"로그인 실패!\n로그인 정보를 다시 확인해 주세요.${idCheck}",Toast.LENGTH_SHORT).show()
-                    }
-                }
-            })
+            getUserInfo(service,userInfo)
 
 
         }
@@ -83,12 +49,54 @@ class MainActivity : AppCompatActivity() {
 
 
         text_signup.setOnClickListener {
-            val intent = Intent(this,SignUpActivity::class.java)
+            val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
         }
     }
 
+    fun initService():Service{
+        val okHttpClient = OkHttpClient.Builder()
+            .connectTimeout(1, TimeUnit.MINUTES)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .build()
+
+        val baseUrl = "http://13.125.154.125:8080/scheduler/"
+
+        var retrofit = Retrofit.Builder().baseUrl(baseUrl)
+            .client(okHttpClient).addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        var service = retrofit.create(Service::class.java)
+        return service
+    }
+
+    fun getUserInfo(service : Service,userInfo: UserInfo){
+        service.userLogin(userInfo).enqueue(object : Callback<UserLoginResult> {
+            override fun onFailure(call: Call<UserLoginResult>, t: Throwable) {
+                Toast.makeText(this@MainActivity, "서버 접속에 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onResponse(
+                call: Call<UserLoginResult>,
+                response: Response<UserLoginResult>
+            ) {
+                val idCheck = response.body()?.result
+                if (idCheck == 1) {
+                    Toast.makeText(this@MainActivity, "로그인 성공!", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this@MainActivity, MyScheduleActivity::class.java)
+                    intent.putExtra("userid", response.body()?.user?.userid.toString())
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(
+                        this@MainActivity,
+                        "로그인 실패!\n로그인 정보를 다시 확인해 주세요.${idCheck}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        })
+    }
 
 
-
-  }
+}
