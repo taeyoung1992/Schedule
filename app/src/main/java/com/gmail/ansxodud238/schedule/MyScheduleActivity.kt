@@ -22,7 +22,6 @@ import kotlin.properties.Delegates
 
 class MyScheduleActivity : AppCompatActivity(), View.OnClickListener {
 
-
     private var allSubjectList: ArrayList<Subject>? = null
     private var myScheduleList: ArrayList<Subject>? = null
     private var dialogAdapter: ArrayAdapter<Subject>? = null
@@ -212,57 +211,59 @@ class MyScheduleActivity : AppCompatActivity(), View.OnClickListener {
         dialogAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, list)
         dialogAdapter!!.notifyDataSetChanged()
 
-        var myWdayList = ArrayList<Subject>()//내 과목 중 요일에 해당하는 목록만 담기위해서
+
 
         val builder = android.app.AlertDialog.Builder(this)
         builder.setTitle("과목을 선택해 주세요")
         builder.setAdapter(dialogAdapter, object : DialogInterface.OnClickListener {
             override fun onClick(dialog: DialogInterface?, which: Int) {
                 if (myScheduleList?.size!! > 0) {
-                    myWdayList = getSubjectByWday(list[which].wday!!, myScheduleList!!)
+                    var myWdayList = getSubjectByWday(list[which].wday!!, myScheduleList!!)
                     if (myWdayList.size == 0) {
                         myScheduleList!!.add(list[which])
                         wipeTable()
                         drawTable(myScheduleList!!)
                         return
                     }
+                    var overlapList:ArrayList<Subject> = ArrayList()
                     for (i in 0..myWdayList.size - 1) {
                         var myStartTime = myWdayList[i].starttime
                         var myEndTime = myWdayList[i].endtime
                         var choiceStartTime = list[which].starttime
                         var choiceEndTime = list[which].endtime
-                        var index = which
                         if (choiceStartTime!! >= myStartTime!! && choiceStartTime!! <= myEndTime!! || choiceEndTime!! >= myStartTime!! && choiceEndTime!! <= myEndTime!!) {
-                            val changeBuilder = AlertDialog.Builder(this@MyScheduleActivity)
-                            changeBuilder.setTitle("겹치는 시간표 입니다.")
-                            changeBuilder.setMessage("선택한 과목으로 변경하시겠습니까?")
-                            changeBuilder.setPositiveButton("예",
-                                object : DialogInterface.OnClickListener {
-                                    override fun onClick(dialog: DialogInterface?, which: Int) {
-                                        myScheduleList!!.removeAt(
-                                            myScheduleList!!.indexOf(
-                                                myWdayList[i]
-                                            )
-                                        )
-                                        myScheduleList!!.add(list[index])
-                                        wipeTable()
-                                        drawTable(myScheduleList!!)
-                                    }
-                                })
-                            changeBuilder.setNegativeButton("아니오",
-                                object : DialogInterface.OnClickListener {
-                                    override fun onClick(dialog: DialogInterface?, which: Int) {
-                                    }
-                                })
-                            val changeDialog = changeBuilder.create()
-                            changeDialog.show()
-                        } else {
-                            myScheduleList!!.add(list[which])
-                            wipeTable()
-                            drawTable(myScheduleList!!)
+                            overlapList.add(myWdayList[i])
                         }
-
                     }
+                    if(overlapList.size>0){
+                        val changeBuilder = AlertDialog.Builder(this@MyScheduleActivity)
+                        changeBuilder.setTitle("겹치는 시간표 입니다.")
+                        changeBuilder.setMessage("선택한 과목으로 변경하시겠습니까?")
+                        changeBuilder.setPositiveButton("예",
+                            object : DialogInterface.OnClickListener {
+                                override fun onClick(dialog: DialogInterface?, index: Int) {
+                                    for(i in 0..overlapList.size-1){
+                                        myScheduleList!!.remove(overlapList.get(i))
+                                }
+                                    myScheduleList!!.add(list[which])
+                                    wipeTable()
+                                    drawTable(myScheduleList!!)
+                                }
+                            })
+                        changeBuilder.setNegativeButton("아니오",
+                            object : DialogInterface.OnClickListener {
+                                override fun onClick(dialog: DialogInterface?, index: Int) {
+
+                                }
+                            })
+                        val changeDialog = changeBuilder.create()
+                        changeDialog.show()
+                    }else{
+                        myScheduleList!!.add(list[which])
+                        wipeTable()
+                        drawTable(myScheduleList!!)
+                    }
+
                 } else {
                     myScheduleList!!.add(list[which])
                     wipeTable()
